@@ -16,6 +16,7 @@ var TestNow = /** @class */ (function () {
             .filter(function (f) { return fs.statSync(f).isFile(); })
             .filter(function (f) { return f.indexOf('.spec') === -1; });
         list.forEach(function (f) { return _this.genTestFile(f); });
+        console.log(list, 'list');
     };
     TestNow.prototype.genTestFile = function (sourceFilePath) {
         var _this = this;
@@ -26,9 +27,10 @@ var TestNow = /** @class */ (function () {
         }
         var mod = require(sourceFilePath);
         var basename = path.basename(sourceFilePath);
+        var extname = path.extname(sourceFilePath);
         var source;
         if (typeof mod === 'function') {
-            source = this.getTestSource(basename.replace('.js', ''), sourceFilePath, false);
+            source = this.getTestSource(basename.replace(extname, ''), sourceFilePath, false);
         }
         else if (typeof mod === 'object') {
             source = Object.keys(mod)
@@ -40,7 +42,7 @@ var TestNow = /** @class */ (function () {
     TestNow.prototype.getTestSource = function (method, filename, isClass) {
         if (isClass === void 0) { isClass = true; }
         var basename = path.basename(filename);
-        return "\ntest('TEST " + method + "', () => {\n  const src = require('../" + basename + "')\n  const " + method + " = " + (isClass ? 'src.' + ("" + method) : 'src') + "\n  const ret = " + method + "()\n  // expect(ret)\n  //  .toBe()\n})\n    ";
+        return "\ntest('TEST " + method + "', () => {\n  const " + (isClass ? "{ " + method + " }" : method) + " = require('../" + basename + "')\n  const ret = " + method + "()\n  // expect(ret)\n  //  .toBe()\n})\n    ";
     };
     /**
      * 根据传入的文件名，生成jest测试文件名

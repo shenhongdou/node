@@ -17,6 +17,7 @@ class TestNow implements TTestNow {
     .filter(f => fs.statSync(f).isFile())
     .filter(f => f.indexOf('.spec') === -1)
     list.forEach(f => this.genTestFile(f))
+    console.log(list, 'list')
   }
 
   genTestFile (sourceFilePath) {
@@ -29,13 +30,14 @@ class TestNow implements TTestNow {
 
     const mod = require(sourceFilePath)
     const basename = path.basename(sourceFilePath)
+    const extname = path.extname(sourceFilePath)
 
     let source
     if (typeof mod === 'function') {
-      source = this.getTestSource(basename.replace('.js', ''), sourceFilePath, false)
+      source = this.getTestSource(basename.replace(extname, ''), sourceFilePath, false)
     } else if (typeof mod === 'object') {     
       source = Object.keys(mod)
-        .map(key => this.getTestSource(key, sourceFilePath ))
+        .map(key => this.getTestSource(key, sourceFilePath))
         .join('\n')
     }
 
@@ -46,8 +48,7 @@ class TestNow implements TTestNow {
     const basename = path.basename(filename)
     return `
 test('TEST ${method}', () => {
-  const src = require('../${basename}')
-  const ${method} = ${isClass ? 'src.'+ `${method}` : 'src'}
+  const ${ isClass ? `{ ${method} }` : method } = require('../${basename}')
   const ret = ${method}()
   // expect(ret)
   //  .toBe()

@@ -1,7 +1,6 @@
 
 test('TEST func', () => {
-  const src = require('../func.js')
-  const func = src
+  const func = require('../func.js')
   const ret = func()
   // expect(ret)
   //  .toBe()
