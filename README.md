@@ -25,8 +25,12 @@ node学习记录
 
 
 ### 协商缓存
-    1.last-modified&if-modified-since 一组通过协商修改时间为基础的策略。服务端返回last-modified给浏览器，浏览器在下次请求的时候通过if-modified-since带上服务端上一次返回的last-modified时间给服务器，服务器来判断缓存是否过期，过期，返回最新内容，未过期，返回304状态码，不返回内容。
-    2.etag&if-none-match 一组基于内容协商的策略。一般的做法是将返回的内容进行摘要（hash），然后通过对比摘要来判断内容是否更新。
+    1.last-modified&if-modified-since 一组通过协商修改时间为基础的策略。
+        服务端返回last-modified给浏览器，浏览器在下次请求的时候通过if-modified-since
+        带上服务端上一次返回的last-modified时间给服务器，服务器来判断缓存是否过期，
+        过期，返回最新内容，未过期，返回304状态码，不返回内容。
+    2.etag&if-none-match 一组基于内容协商的策略。
+        一般的做法是将返回的内容进行摘要（hash），然后通过对比摘要来判断内容是否更新。
 
 
 ### ajax缓存、发生在get请求
@@ -34,3 +38,7 @@ node学习记录
 ### ServiceWorker缓存
 
 ## spider 爬虫
+
+## OAuth 开放授权
+三方登录主要基于OAuth 2.0。与以往的授权方式不同之处是OAuth的授权不会使第三方触及到用户的账号信息，如用户名、密码。
+即，第三方无需使用用户的用户名密码就可以申请获得该资源的授权，因此OAuth是安全的。
