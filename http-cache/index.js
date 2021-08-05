@@ -10,7 +10,15 @@ const updateTime = () => {
   // return this.time
 }
 
+function getPrototypeChain (obj) {
+  let i = 0
+  while(obj = Object.getPrototypeOf(obj)) {
+    console.log(obj, ++i)
+  }
+}
+
 http.createServer((req, res) => {
+  getPrototypeChain(res)
   if (req.url === '/') {
     res.end(`
       <html>
