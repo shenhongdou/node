@@ -4,17 +4,19 @@ const request = require('./request')
 const response = require('./response')
 const context = require('./context')
 
-class KKB {
+class Koa {
   constructor () {
     this.middlewares = []
+    this.routes = {}
   }
 
   listen (...args) {
-    http.createServer((req, res) => {
+    http.createServer(async (req, res) => {
       this.ctx = this.createContext(req, res)
       // this.callback(this.ctx)
-      const fns = this.compose(this.middlewares)
-      fns(this.ctx)
+      const fn = this.compose(this.middlewares)
+      await fn(this.ctx)
+      this.routes[req.url](this.ctx)
       res.end(this.ctx.body)
     }).listen(...args)
   }
@@ -22,6 +24,10 @@ class KKB {
   use (callback) {
     // this.callback = callback
     this.middlewares.push(callback)
+  }
+
+  get (url, handle) {
+    this.routes[url] = (ctx) => handle(ctx)
   }
 
   createContext (req, res) {
@@ -38,11 +44,11 @@ class KKB {
   compose (middlewares) {
     return function (ctx) {
       return dispatch(0)
+
       function dispatch (i) {
         const fn = middlewares[i]
-        if (typeof fn !== 'function') {
-          return Promise.resolve()
-        }
+
+        if (typeof fn !== 'function') return Promise.resolve()
 
         return Promise.resolve(
           fn(ctx, function next () {
@@ -55,4 +61,4 @@ class KKB {
 }
 
 
-module.exports = KKB
+module.exports = Koa

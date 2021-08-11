@@ -1,3 +1,5 @@
+const { resolve } = require("path")
+
 function* asyncFunc () {
   console.log(1)
   yield 'one'
@@ -36,6 +38,21 @@ function generator () {
   co(ge())
 }
 
+const s = 'aaa_aa_a'
 
-// module.exports = asyncFunc
+const r1 = /a+/g
+const r2 = /a+/y
+
+// console.log(r1.exec(s))
+// console.log(r2.exec(s))
+
+// // console.log(r1.exec(s))
+// console.log(r2.exec(s))
+
+const arr = [1,]
+arr.forEach((item) => {
+  console.log(item, 'item--')
+})
+
+
 module.exports = generator

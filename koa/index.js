@@ -2,43 +2,56 @@
 // const app = new Koa()
 
 // app.use(async (ctx, next) => {
-//   console.log(1)
-//   await next()
-//   console.log(4)
+//   ctx.body = 1
+//   next()
+//   console.log(ctx, 'ctx')
+//   console.log(ctx.method)
 // })
 
-// app.use(async (ctx, next) => {
-//   console.log(2)
-//   await next()
-//   console.log(3)
-// })
 
 // app.listen(3004, () => {
 //   console.log('server start at port 3004')
 // })
 
-const KKB = require('./KKB')
-const app = new KKB()
+const Koa = require('./Koa')
+const app = new Koa()
 
 const delay = (time = 100) => new Promise((resolve) => {
   setTimeout(resolve, time)
 })
 
 app.use(async (ctx, next) => {
-  console.log(1)
-  await delay()
-  console.log(5)
+  ctx.body = '1'
   await next()
-  console.log(4)
 })
-
-app.use(async (ctx, next) => {
-  console.log(2)
-  await next()
-  console.log(3)
-})
-
 
 app.listen(3004, () => {
   console.log('server start at port 3004')
 })
+
+app.get('/', function (ctx) {
+  ctx.body = '1'
+})
+
+app.get('/abc', function (ctx) {
+  ctx.body = 'abc'
+})
+
+
+// const compose = (firstFn, ...resetFns) => (...args) => {
+//   let ret = firstFn(...args)
+//   resetFns.forEach(fn => {
+//     ret = fn(ret)
+//   })
+
+//   return ret
+// }
+
+// const compose2 = (firstFn, ...resetFns) => 
+//   (...args) => resetFns.reduce((acc, cur) => cur(acc), firstFn(...args))
+
+// const add = (x, y) => x + y
+// const square = x => x * x
+
+// console.log(compose(add, square, square, square)(1, 2)) 
+// console.log(compose2(add, square, square, square)(1, 2))
